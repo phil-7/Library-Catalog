@@ -1,0 +1,250 @@
+/* static/style.css
+   Haiti-themed color scheme and subtle motif accents inspired by Haitian flag
+   and vibrant textile patterns. Keeps original layout and spacing but swaps
+   colors and small decorative touches to evoke Haitian design.
+*/
+
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --muted:#4b5563;
+  --accent-blue:#00209f; /* deep flag blue */
+  --accent-red:#d7263d;  /* vibrant flag red */
+  --accent-dark:#0b1738;
+  --border:#e6e9ef;
+  --pattern:#f0f4ff;
+  --max-width:980px;
+  --radius:10px;
+  --gap:16px;
+  font-family: "Noto Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color-scheme: light;
+}
+
+/* subtle woven stripe background inspired by Haitian textiles */
+body{
+  margin:0;
+  background:
+    linear-gradient(135deg, rgba(0,32,159,0.03) 0 2px, transparent 2px 4px),
+    linear-gradient(45deg, rgba(215,38,61,0.02) 0 2px, transparent 2px 4px),
+    var(--bg);
+  color:#0f1724;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  padding:28px;
+  display:flex;
+  justify-content:center;
+  min-height:100vh;
+  box-sizing:border-box;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+
+.site-header{
+  width:100%;
+  max-width:var(--max-width);
+  margin:0 0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.site-header h1{
+  margin:0;
+  font-size:1.35rem;
+  letter-spacing:-0.02em;
+  color:var(--accent-dark);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* small flag emblem */
+.site-header h1::before{
+  content:"";
+  width:28px;
+  height:18px;
+  display:inline-block;
+  background: linear-gradient(90deg, var(--accent-blue) 50%, var(--accent-red) 50%);
+  border-radius:3px;
+  box-shadow:0 1px 0 rgba(0,0,0,0.06) inset;
+}
+
+.search-form{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.search-form input[type="search"]{
+  padding:9px 12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  min-width:240px;
+  background:var(--card);
+  box-shadow:0 1px 0 rgba(2,6,23,0.02);
+}
+
+.search-form select{
+  padding:8px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--card);
+}
+
+.search-form button{
+  background: linear-gradient(180deg, var(--accent-red), #b21b33);
+  color:#fff;
+  border:none;
+  padding:9px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+  letter-spacing:0.01em;
+  box-shadow:0 6px 18px rgba(215,38,61,0.12);
+}
+
+.content{
+  width:100%;
+  max-width:var(--max-width);
+  background:transparent;
+}
+
+.summary .muted{
+  color:var(--muted);
+  margin:0 0 12px;
+}
+
+.item-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+
+.item{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:14px;
+  border-radius:var(--radius);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  transition:transform .12s ease, box-shadow .12s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+/* decorative corner stripe using flag colors */
+.item::after{
+  content:"";
+  position:absolute;
+  right:-40px;
+  top:-40px;
+  width:120px;
+  height:120px;
+  transform:rotate(25deg);
+  background: linear-gradient(90deg, rgba(0,32,159,0.06) 50%, rgba(215,38,61,0.06) 50%);
+  pointer-events:none;
+}
+
+.item:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 30px rgba(2,6,23,0.06);
+}
+
+.item-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.item-title{
+  margin:0;
+  font-size:1.02rem;
+  color:var(--accent-dark);
+}
+
+.item-sub{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  color:var(--muted);
+  font-size:0.85rem;
+}
+
+.badge{
+  background: linear-gradient(180deg, rgba(0,32,159,0.08), rgba(215,38,61,0.03));
+  color:var(--accent-dark);
+  padding:5px 10px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:0.78rem;
+  border:1px solid rgba(2,6,23,0.03);
+}
+
+.item-desc{
+  margin:0;
+  color:#24303f;
+  font-size:0.95rem;
+}
+
+.item-actions{
+  margin:0;
+}
+
+.open-link{
+  display:inline-block;
+  text-decoration:none;
+  color:var(--accent-blue);
+  font-weight:700;
+  border:1px solid transparent;
+  padding:7px 12px;
+  border-radius:8px;
+  background: linear-gradient(180deg, rgba(0,32,159,0.04), transparent);
+}
+
+.open-link:hover{
+  text-decoration:underline;
+  color:#07104a;
+}
+
+.pagination{
+  margin-top:18px;
+  display:flex;
+  gap:8px;
+}
+
+.page-link{
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:9px 14px;
+  border-radius:8px;
+  text-decoration:none;
+  color:var(--accent-dark);
+  font-weight:700;
+}
+
+/* footer */
+.site-footer{
+  width:100%;
+  max-width:var(--max-width);
+  margin-top:28px;
+  color:var(--muted);
+  font-size:0.85rem;
+  text-align:center;
+}
+
+/* Responsive */
+@media (min-width:700px){
+  .item-list{grid-template-columns:repeat(2, 1fr)}
+}
+
+@media (min-width:1100px){
+  .item-list{grid-template-columns:repeat(3, 1fr)}
+}
