@@ -1,7 +1,3 @@
 flask
-requests
 libzim
 pytest
-python-dotenv
-pydantic
-dataclasses-json
