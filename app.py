@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 
 # --- Load ZIM file ---
-ZIM_PATH = os.environ.get("ZIM_FILE", "data/phet_ht_all_2026-05.zim")
+ZIM_PATH = os.environ.get("ZIM_FILE", "data/ekopedia_fr_all_nopic_2021-03.zim")
 zim = Archive(ZIM_PATH)
 
 # -------------------------------------------------------
@@ -49,7 +49,7 @@ SEARCH_TEMPLATE = """
   <p class="count">~{{ count }} results for "<b>{{ query }}</b>"</p>
   <ul>
   {% for r in results %}
-    <li><a href="/zim/{{ r.path }}">{{ r.title }}</a></li>
+    <li><a href="/zim/{{ r['path'] }}">{{ r['title'] }}</a></li>
   {% endfor %}
   </ul>
   {% if count == 0 %}
@@ -72,10 +72,20 @@ def search():
             query = Query().set_query(q)
             search = searcher.search(query)
             count = search.getEstimatedMatches()
-            results = list(search.getResults(0, 25))  # first 25 results
+            for result in search.getResults(0, 25):
+                try:
+                    entry = zim.get_entry_by_path(result)
+                    results.append({
+                        "path": result,
+                        "title": entry.title
+                    })
+                except KeyError:
+                    results.append({
+                        "path": result,
+                        "title": result  # fallback to path if entry not found
+                    })                   # just check the first one
         except Exception as e:
-            # ZIM may not have a full-text index (older files)
-            pass
+            print(f"Search error: {e}")
     return render_template_string(SEARCH_TEMPLATE, query=q, results=results, count=count)
 
 
