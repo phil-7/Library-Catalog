@@ -1,4 +1,4 @@
-# app.py
+# app.py         - Flask application entry point; registers routes and starts the server
 from flask import Flask, Response, request, render_template_string, abort
 from libzim.reader import Archive
 from libzim.search import Query, Searcher
