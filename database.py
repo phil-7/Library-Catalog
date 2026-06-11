@@ -16,6 +16,25 @@ def init_db():
     connection.commit()
     connection.close()
 
+# Fetch 10 ZIM files at a time based on page number
+def get_zim_files(page):
+    offset = (page - 1) * 10
+    connection = sqlite3.connect(config.DATABASE_PATH)
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM library LIMIT 10 OFFSET ?", (offset,))
+    rows = cursor.fetchall()
+    connection.close()
+    return rows
+
+# Calculate total number of pages
+def get_total_pages():
+    connection = sqlite3.connect(config.DATABASE_PATH)
+    cursor = connection.cursor()
+    cursor.execute("SELECT COUNT(*) FROM library")
+    total = cursor.fetchone()[0]
+    connection.close()
+    return (total + 9) // 10
+
 if __name__ == "__main__":
     init_db()
     print("Database initialized!")

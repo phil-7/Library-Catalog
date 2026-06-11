@@ -3,9 +3,31 @@
 
 <html lang="en">
     <head>
-        <title>Library Catalog</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        {% block title %}<title>Library Catalog</title>{% endblock %}
+        <link href="/static/styles.css" rel="stylesheet">
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <nav>
+            <div class="nav-left">
+                <a href="/">Library Catalog</a>
+            </div>
+
+            <div class="nav-middle">
+                <form action="/search" method="get">
+                    <input type="text" name="q" placeholder="Search...">
+                    <button type="submit">🔍</button>
+                </form>
+            </div>
+
+            <div class="nav-right">
+                <button>🇺🇸 EN</button>
+                <button>🇫🇷 FR</button>
+                <button>🇭🇹 HT</button>
+            </div>
+        </nav>
+
+        {% block content %}{% endblock %}
     </body>
-</html>
+</html>-->>
