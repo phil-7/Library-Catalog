@@ -8,7 +8,7 @@ def init_db():
     cursor = connection.cursor()
     cursor.execute("CREATE TABLE IF NOT EXISTS library(" \
     "id INTEGER PRIMARY KEY AUTOINCREMENT," \
-    "filename TEXT," \
+    "filename TEXT UNIQUE," \
     "title TEXT," \
     "language TEXT," \
     "path TEXT" \
