@@ -2,8 +2,8 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div class="home-container">
-        
+    <div class="content">
+
         <!-- Language Filter Dropdown -->
         <div class="filter-container">
             <label for="language-filter">Filter by Language:</label>
@@ -25,13 +25,13 @@
             </thead>
             <tbody>
                 {% for zim in zim_files %}
-                <tr data-language="{{ zim.language }}">
-                    <td><a href="/reader/{{ zim.path }}">{{ zim.title }}</a></td>
+                <tr data-language="{{ zim['language'] }}">
+                    <td><a href="/reader/{{ zim['path'] }}">{{ zim['title'] }}</a></td>
                     <td>
-                        {% if zim.language == "en" %} 🇺🇸 English
-                        {% elif zim.language == "fr" %} 🇫🇷 French
-                        {% elif zim.language == "ht" %} 🇭🇹 Haitian Creole
-                        {% else %} {{ zim.language }}
+                        {% if zim['language'] == "en" %} 🇺🇸 English
+                        {% elif zim['language'] == "fr" %} 🇫🇷 French
+                        {% elif zim['language'] == "ht" %} 🇭🇹 Haitian Creole
+                        {% else %} {{ zim['language'] }}
                         {% endif %}
                     </td>
                 </tr>
@@ -59,7 +59,7 @@
         function filterTable() {
             const filter = document.getElementById("language-filter").value;
             const rows = document.querySelectorAll("#zim-table tbody tr");
-            
+
             rows.forEach(row => {
                 const lang = row.getAttribute("data-language");
                 if (filter === "all" || lang === filter) {

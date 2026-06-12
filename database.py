@@ -20,8 +20,9 @@ def init_db():
 def get_zim_files(page):
     offset = (page - 1) * 10
     connection = sqlite3.connect(config.DATABASE_PATH)
+    connection.row_factory = sqlite3.Row # Converts tuple to dictionary
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM library LIMIT 10 OFFSET ?", (offset,))
+    cursor.execute("SELECT * FROM library ORDER BY title ASC LIMIT 10 OFFSET ?", (offset,))
     rows = cursor.fetchall()
     connection.close()
     return rows
