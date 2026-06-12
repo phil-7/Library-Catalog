@@ -17,21 +17,31 @@ def init_db():
     connection.close()
 
 # Fetch 10 ZIM files at a time based on page number
-def get_zim_files(page):
+def get_zim_files(page, language=None):
     offset = (page - 1) * 10
     connection = sqlite3.connect(config.DATABASE_PATH)
-    connection.row_factory = sqlite3.Row # Converts tuple to dictionary
+    connection.row_factory = sqlite3.Row
     cursor = connection.cursor()
-    cursor.execute("SELECT * FROM library ORDER BY title ASC LIMIT 10 OFFSET ?", (offset,))
+
+    # Filter by language if user selects language
+    if language:
+        cursor.execute("SELECT * FROM library WHERE language = ? ORDER BY title ASC LIMIT 10 OFFSET ?", (language, offset))
+    else:
+        cursor.execute("SELECT * FROM library ORDER BY title ASC LIMIT 10 OFFSET ?", (offset,))
     rows = cursor.fetchall()
     connection.close()
     return rows
 
 # Calculate total number of pages
-def get_total_pages():
+def get_total_pages(language=None):
     connection = sqlite3.connect(config.DATABASE_PATH)
     cursor = connection.cursor()
-    cursor.execute("SELECT COUNT(*) FROM library")
+
+    # Filter by language if user selects language
+    if language:
+        cursor.execute("SELECT COUNT(*) FROM library WHERE language = ?", (language,))
+    else:
+        cursor.execute("SELECT COUNT(*) FROM library")
     total = cursor.fetchone()[0]
     connection.close()
     return (total + 9) // 10

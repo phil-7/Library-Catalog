@@ -7,12 +7,14 @@
         <!-- Language Filter Dropdown -->
         <div class="filter-container">
             <label for="language-filter">Filter by Language:</label>
-            <select id="language-filter" onchange="filterTable()">
-                <option value="all">All</option>
-                <option value="en">🇺🇸 EN</option>
-                <option value="fr">🇫🇷 FR</option>
-                <option value="ht">🇭🇹 HT</option>
-            </select>
+            <form method="get" action="/">
+                <select name="language" onchange="this.form.submit()">
+    <option value="" {% if not language %}selected{% endif %}>All</option>
+    <option value="en" {% if language == "en" %}selected{% endif %}>🇺🇸 EN</option>
+    <option value="fr" {% if language == "fr" %}selected{% endif %}>🇫🇷 FR</option>
+    <option value="ht" {% if language == "ht" %}selected{% endif %}>🇭🇹 HT</option>
+</select>
+            </form>
         </div>
 
         <!-- ZIM Files Table -->
@@ -42,33 +44,16 @@
         <!-- Pagination -->
         <div class="pagination">
             {% if page > 1 %}
-                <a href="/?page={{ page - 1 }}">← Previous</a>
+                <a href="/?page={{ page - 1 }}&language={{ language }}">← Previous</a>
             {% endif %}
 
             <span>Page {{ page }} of {{ total_pages }}</span>
 
             {% if page < total_pages %}
-                <a href="/?page={{ page + 1 }}">Next →</a>
+                <a href="/?page={{ page + 1 }}&language={{ language }}">Next →</a>
             {% endif %}
         </div>
 
     </div>
-
-    <!-- JavaScript for language filter -->
-    <script>
-        function filterTable() {
-            const filter = document.getElementById("language-filter").value;
-            const rows = document.querySelectorAll("#zim-table tbody tr");
-
-            rows.forEach(row => {
-                const lang = row.getAttribute("data-language");
-                if (filter === "all" || lang === filter) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            });
-        }
-    </script>
 
 {% endblock %}

@@ -20,11 +20,12 @@ populate_database()
 def index():
     
     page = int(request.args.get("page", 1))
+    language = request.args.get("language", None)
 
-    zim_files = get_zim_files(page)
-    total_pages = get_total_pages()
+    zim_files = get_zim_files(page, language)
+    total_pages = get_total_pages(language)
 
-    return render_template("home.html", page=page, total_pages=total_pages, zim_files=zim_files)
+    return render_template("home.html", page=page, total_pages=total_pages, zim_files=zim_files, language=language)
 
 @app.route("/search")
 def search():
