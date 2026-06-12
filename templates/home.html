@@ -44,14 +44,14 @@
         <!-- Pagination -->
         <div class="pagination">
             {% if page > 1 %}
-                <a href="/?page={{ page - 1 }}&language={{ language }}">← Previous</a>
-            {% endif %}
+    <a href="/?page={{ page - 1 }}{% if language %}&language={{ language }}{% endif %}">← Previous</a>
+{% endif %}
 
-            <span>Page {{ page }} of {{ total_pages }}</span>
+<span>Page {{ page }} of {{ total_pages }}</span>
 
-            {% if page < total_pages %}
-                <a href="/?page={{ page + 1 }}&language={{ language }}">Next →</a>
-            {% endif %}
+{% if page < total_pages %}
+    <a href="/?page={{ page + 1 }}{% if language %}&language={{ language }}{% endif %}">Next →</a>
+{% endif %}
         </div>
 
     </div>
