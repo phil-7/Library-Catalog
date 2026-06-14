@@ -6,14 +6,14 @@
 
         <!-- Language Filter Dropdown -->
         <div class="filter-container">
-            <label for="language-filter">Filter by Language:</label>
+            <label for="language-filter">{{ t.get('filter_language', 'Filter by Language') }}:</label>
             <form method="get" action="/">
                 <select name="language" onchange="this.form.submit()">
-    <option value="" {% if not language %}selected{% endif %}>All</option>
-    <option value="en" {% if language == "en" %}selected{% endif %}>🇺🇸 EN</option>
-    <option value="fr" {% if language == "fr" %}selected{% endif %}>🇫🇷 FR</option>
-    <option value="ht" {% if language == "ht" %}selected{% endif %}>🇭🇹 HT</option>
-</select>
+                    <option value="" {% if not language %}selected{% endif %}>{{ t.get('all', 'All') }}</option>
+                    <option value="en" {% if language == "en" %}selected{% endif %}>🇺🇸 EN</option>
+                    <option value="fr" {% if language == "fr" %}selected{% endif %}>🇫🇷 FR</option>
+                    <option value="ht" {% if language == "ht" %}selected{% endif %}>🇭🇹 HT</option>
+                </select>
             </form>
         </div>
 
@@ -21,8 +21,8 @@
         <table id="zim-table">
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Language</th>
+                    <th>{{ t.get('title', 'Title') }}</th>
+                    <th>{{ t.get('language', 'Language') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,14 +44,14 @@
         <!-- Pagination -->
         <div class="pagination">
             {% if page > 1 %}
-    <a href="/?page={{ page - 1 }}{% if language %}&language={{ language }}{% endif %}">← Previous</a>
-{% endif %}
+                <a href="/?page={{ page - 1 }}{% if language %}&language={{ language }}{% endif %}">{{ t.get('previous', '← Previous') }}</a>
+            {% endif %}
 
-<span>Page {{ page }} of {{ total_pages }}</span>
+            <span>{{ t.get('page_of', 'Page {page} of {total}').replace('{page}', page|string).replace('{total}', total_pages|string) }}</span>
 
-{% if page < total_pages %}
-    <a href="/?page={{ page + 1 }}{% if language %}&language={{ language }}{% endif %}">Next →</a>
-{% endif %}
+            {% if page < total_pages %}
+                <a href="/?page={{ page + 1 }}{% if language %}&language={{ language }}{% endif %}">{{ t.get('next', 'Next →') }}</a>
+            {% endif %}
         </div>
 
     </div>

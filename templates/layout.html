@@ -5,22 +5,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, width=device-width">
-        {% block title %}<title>Library Catalog</title>{% endblock %}
+        {% block title %}<title>{{ t.get('library_catalog', 'Library Catalog') }}</title>{% endblock %}
         <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
     </head>
     <body>
         <header class="site-header">
-            <h1>Library Catalog</h1>
-            <!--
-            <form class="search-form" action="/search" method="get">
-                <input type="search" name="q" placeholder="Search...">
-                <button type="submit">🔍 Search</button>
-            </form>
-            -->
+            <h1>{{ t.get('library_catalog', 'Library Catalog') }}</h1>
             <div>
-                <button>🇺🇸 EN</button>
-                <button>🇫🇷 FR</button>
-                <button>🇭🇹 HT</button>
+                <a href="/set-language/en"><button>🇺🇸 EN</button></a>
+                <a href="/set-language/fr"><button>🇫🇷 FR</button></a>
+                <a href="/set-language/ht"><button>🇭🇹 HT</button></a>
             </div>
         </header>
 

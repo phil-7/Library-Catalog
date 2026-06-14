@@ -1,5 +1,5 @@
 # app.py         - Flask application entry point; registers routes and starts the server
-from flask import Flask, request, render_template, Response, abort, redirect
+from flask import Flask, request, render_template, Response, abort, redirect, session
 
 from libzim.reader import Archive
 from libzim.search import Query, Searcher
@@ -7,13 +7,18 @@ from libzim.search import Query, Searcher
 from database import init_db, get_zim_files, get_total_pages
 from zim_manager import populate_database
 
+import json
 import mimetypes
+import os
 
 import config
 
 
 # Initiate app
 app = Flask(__name__)
+
+# Session key
+app.secret_key = config.SECRET_KEY
 
 # Creates database if it doesn't exist
 init_db()
@@ -22,19 +27,47 @@ init_db()
 populate_database()
 
 
+# Load translations based on session language
+def get_translations():
+    lang = session.get("lang")
+    if not lang:
+        lang = request.accept_languages.best_match(["en", "fr", "ht"], default="en")
+    if lang == "en":
+        return {}
+    path = os.path.join("translations", f"{lang}.json")
+    if os.path.exists(path):
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                content = f.read().strip()
+                if content:
+                    return json.loads(content)  # ← loads() not load()
+        except Exception as e:
+            print(f"Translation error: {e}")
+    return {}
+
+
 # Main Page for Library Catalog
 @app.route("/")
 def index():
-    
     page = int(request.args.get("page", 1))
     language = request.args.get("language", None)
+    t = get_translations()
 
     zim_files = get_zim_files(page, language)
     total_pages = get_total_pages(language)
 
-    return render_template("home.html", page=page, total_pages=total_pages, zim_files=zim_files, language=language)
+    return render_template("home.html", page=page, total_pages=total_pages, zim_files=zim_files, language=language, t=t)
 
 
+# Set UI language and redirect back to previous page
+@app.route("/set-language/<lang>")
+def set_language(lang):
+    if lang in config.LANGUAGES:
+        session["lang"] = lang
+    return redirect(request.referrer or "/")
+
+
+# Serve content from inside a ZIM file
 @app.route("/reader/<path:zim_path>")
 def reader(zim_path):
 
@@ -107,12 +140,15 @@ def reader(zim_path):
     response.headers["Cross-Origin-Embedder-Policy"] = "require-corp"
     return response
 
+
+# Search within a ZIM file
 @app.route("/search")
 def search():
 
     # Get search query and ZIM file path from URL
     q = request.args.get("q", "").strip()
     zim_path = request.args.get("zim", "")
+    t = get_translations()
 
     results = []
     count = 0
@@ -143,9 +179,10 @@ def search():
         except Exception as e:
             print(f"Search error: {e}")
 
-    return render_template("search.html", query=q, results=results, count=count, zim_path=zim_path)
+    return render_template("search.html", query=q, results=results, count=count, zim_path=zim_path, t=t)
+
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
-    
-    # on Mac, Run flask run --host=0.0.0.0 --port=5001 to log on with phone
+
+# on Mac, run: flask run --host=0.0.0.0 --port=5001 to access from phone

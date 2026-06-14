@@ -10,3 +10,4 @@ LANGUAGES = {
     "fr" : "French"
 }
 DATABASE_PATH = "library.db"
+SECRET_KEY = "offline-library-secret-key"

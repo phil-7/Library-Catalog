@@ -7,13 +7,13 @@
         <!-- Search Form -->
         <form action="/search" method="get">
             <input type="hidden" name="zim" value="{{ zim_path }}">
-            <input type="text" name="q" value="{{ query }}" placeholder="Search...">
-            <button type="submit">🔍 Search</button>
+            <input type="text" name="q" value="{{ query }}" placeholder="{{ t.get('search_placeholder', 'Search...') }}">
+            <button type="submit">🔍 {{ t.get('search_button', 'Search') }}</button>
         </form>
 
         <!-- Results Count -->
         {% if query %}
-            <p>~{{ count }} results for "<b>{{ query }}</b>"</p>
+            <p>~{{ count }} {{ t.get('results_for', 'results for') }} "<b>{{ query }}</b>"</p>
 
             <!-- Results List -->
             {% if results %}
@@ -25,15 +25,15 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                <p>No results found. Try a different search term.</p>
+                <p>{{ t.get('no_results', 'No results found. Try a different search term.') }}</p>
             {% endif %}
         {% endif %}
 
         <!-- Back to ZIM -->
-        <p><a href="/reader/{{ zim_path }}">← Back to {{ zim_path.split('/')[-1].replace('_', ' ').replace('.zim', '') }}</a></p>
+        <p><a href="/reader/{{ zim_path }}">{{ t.get('back_to', '← Back to') }} {{ zim_path.split('/')[-1].replace('_', ' ').replace('.zim', '') }}</a></p>
 
         <!-- Back to Home -->
-        <p><a href="/">🏠 Back to Library</a></p>
+        <p><a href="/">{{ t.get('back_to_library', '🏠 Back to Library') }}</a></p>
 
     </div>
 {% endblock %}

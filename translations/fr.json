@@ -1,0 +1,16 @@
+{
+    "library_catalog": "Catalogue de Bibliothèque",
+    "filter_language": "Filtrer par langue",
+    "all": "Tout",
+    "title": "Titre",
+    "language": "Langue",
+    "previous": "← Précédent",
+    "next": "Suivant →",
+    "page_of": "Page {page} de {total}",
+    "search_placeholder": "Rechercher...",
+    "search_button": "Rechercher",
+    "results_for": "résultats pour",
+    "no_results": "Aucun résultat trouvé. Essayez un autre terme.",
+    "back_to_library": "🏠 Retour à la bibliothèque",
+    "back_to": "← Retour à"
+}

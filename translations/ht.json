@@ -1,0 +1,16 @@
+{
+    "library_catalog": "Katalòg Bibliyotèk",
+    "filter_language": "Filtre pa lang",
+    "all": "Tout",
+    "title": "Tit",
+    "language": "Lang",
+    "previous": "← Anvan",
+    "next": "Swivan →",
+    "page_of": "Paj {page} nan {total}",
+    "search_placeholder": "Chèche...",
+    "search_button": "Chèche",
+    "results_for": "rezilta pou",
+    "no_results": "Pa gen rezilta. Eseye yon lòt mo.",
+    "back_to_library": "🏠 Retounen nan bibliyotèk",
+    "back_to": "← Retounen nan"
+}
