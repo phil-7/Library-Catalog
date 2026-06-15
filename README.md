@@ -65,7 +65,7 @@ Library-Catalog/
 ### Requirements
 
 - Python 3.11 or 3.12
-- pip
+- Raspberry Pi 4B
 
 ### Mac / Linux
 
@@ -79,14 +79,14 @@ python3 -m venv venv
 source venv/bin/activate
 
 # Install dependencies
-pip install flask libzim gunicorn
+pip install -r requirements.txt
 
 # Add ZIM files to the data/ folder
 # then run the app
 python app.py
 ```
 
-Visit `http://127.0.0.1:5000` in your browser.
+Visit relevant IP in your browser.
 
 ### Windows
 
@@ -96,7 +96,7 @@ python -m venv venv
 venv\Scripts\activate
 
 # Install dependencies
-pip install flask libzim gunicorn
+pip install -r requirements.txt
 
 # Add ZIM files to the data/ folder
 # then run the app
@@ -104,7 +104,7 @@ $env:ZIM_FILE="data/your_file.zim"
 python app.py
 ```
 
-Visit `http://127.0.0.1:5000` in your browser.
+Visit relevant IP in your browser.
 
 ---
 
@@ -163,7 +163,7 @@ sudo systemctl enable library.service
 sudo systemctl start library.service
 ```
 
-Users connect to the WiFi network and visit `http://10.42.0.1` in their browser.
+Users connect to the WiFi network and visit the relevant IP in their browser.
 
 ### Stopping Auto-Start
 
