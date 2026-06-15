@@ -6,7 +6,9 @@ import sqlite3
 def init_db():
     connection = sqlite3.connect(config.DATABASE_PATH)
     cursor = connection.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS library(" \
+    # Drop table if exists and recreate fresh
+    cursor.execute("DROP TABLE IF EXISTS library")
+    cursor.execute("CREATE TABLE library(" \
     "id INTEGER PRIMARY KEY AUTOINCREMENT," \
     "filename TEXT UNIQUE," \
     "title TEXT," \
