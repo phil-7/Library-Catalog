@@ -1,11 +1,12 @@
 # Virtualenv
 .venv/
+venv/
 
 # Local env file
 .env
 
 # SQLite DB (runtime)
-data/catalog.db
+data/library.db
 
 # Python cache
 __pycache__/
