@@ -1,11 +1,173 @@
-# Unified-Offline-Library-Catalog
-A community in rural Haiti has an oﬄine "library hub": a small server (a Raspberry Pi) that runs without internet and lets nearby phones and laptops connect over local Wi-Fi to read educational content.
+# Library Catalog
 
-Download necessary modules
-```pip install -r requirements.txt```
+A self-hosted offline digital library built with Flask and Python. Designed to run on a Raspberry Pi, it creates its own WiFi hotspot so users can access educational content from their phones or laptops without an internet connection.
 
-Run database.py first
-```python database.py```
+---
 
-Run zim_manger.py next
-```python zim_manager.py```
+## Motivation
+
+Millions of people around the world lack reliable internet access, yet have a genuine desire to learn. This project aims to bridge that gap by providing a portable, offline-first library that any community can use.
+
+---
+
+## Features
+
+- Serves multiple ZIM files (Wikipedia, PhET simulations, Ekopedia, and more)
+- Full-text search within ZIM files
+- Multilingual interface (English, French, Haitian Creole)
+- Auto-detects browser language
+- Paginated library catalog with language filtering
+- Runs as a WiFi hotspot on Raspberry Pi — no internet required
+- Auto-starts on boot, no keyboard or monitor needed
+- Mobile-friendly, works on any device with a browser
+
+---
+
+## Tech Stack
+
+- **Python 3** — core language
+- **Flask** — web framework
+- **libzim** — reads and serves ZIM file content
+- **SQLite** — stores library metadata
+- **Gunicorn** — production WSGI server
+- **NetworkManager** — manages WiFi hotspot on Raspberry Pi
+- **HTML/CSS/Jinja2** — frontend templates
+
+---
+
+## Project Structure
+
+```
+Library-Catalog/
+├── app.py              # Flask application entry point; registers routes and starts the server
+├── config.py           # Stores application settings such as host, port, data folder path, and language defaults
+├── database.py         # Manages SQLite connection, schema, and queries for ZIM file metadata
+├── zim_manager.py      # Handles scanning the data/ folder, loading ZIM archives, and serving their content
+├── library.db          # Auto-generated SQLite database (not tracked by Git)
+├── data/               # Place ZIM files here (not tracked by Git)
+├── templates/
+│   ├── layout.html     # Base template with shared navigation, language selector, and page structure
+│   ├── home.html       # Centralized library homepage listing all available ZIM files by language
+│   └── search.html     # Displays search results from querying a ZIM file's index
+├── static/
+│   └── styles.css      # Haiti-themed stylesheet
+└── translations/
+    ├── fr.json         # French UI translations
+    └── ht.json         # Haitian Creole UI translations
+```
+
+---
+
+## Setup
+
+### Requirements
+
+- Python 3.11 or 3.12
+- pip
+
+### Mac / Linux
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/Library-Catalog
+cd Library-Catalog
+
+# Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install dependencies
+pip install flask libzim gunicorn
+
+# Add ZIM files to the data/ folder
+# then run the app
+python app.py
+```
+
+Visit `http://127.0.0.1:5000` in your browser.
+
+### Windows
+
+```powershell
+# Create and activate virtual environment
+python -m venv venv
+venv\Scripts\activate
+
+# Install dependencies
+pip install flask libzim gunicorn
+
+# Add ZIM files to the data/ folder
+# then run the app
+$env:ZIM_FILE="data/your_file.zim"
+python app.py
+```
+
+Visit `http://127.0.0.1:5000` in your browser.
+
+---
+
+## Adding ZIM Files
+
+1. Download ZIM files from [https://library.kiwix.org](https://library.kiwix.org)
+2. Name them using this convention: `Title_language.zim`
+   - Example: `Chemistry_Wiki_en.zim`, `Ekopedia_fr.zim`
+   - Supported language codes: `en`, `fr`, `ht`
+3. Place them in the `data/` folder
+4. Restart the app — the database updates automatically
+
+---
+
+## Raspberry Pi Deployment
+
+### Prerequisites
+
+```bash
+sudo apt-get install network-manager -y
+pip install flask libzim gunicorn
+```
+
+### Hotspot Setup
+
+```bash
+sudo nmcli device wifi hotspot ifname wlan0 ssid YourNetworkName password YourPassword
+sudo nmcli connection modify Hotspot autoconnect yes
+```
+
+### Auto-Start on Boot
+
+Create `/etc/systemd/system/library.service`:
+
+```
+[Unit]
+Description=Offline Library Catalog
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/home/pi/Library-Catalog
+Environment="PATH=/home/pi/Library-Catalog/venv/bin"
+ExecStart=/home/pi/Library-Catalog/venv/bin/gunicorn -w 2 -b 0.0.0.0:80 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable and start:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable library.service
+sudo systemctl start library.service
+```
+
+Users connect to the WiFi network and visit `http://10.42.0.1` in their browser.
+
+### Stopping Auto-Start
+
+```bash
+sudo systemctl disable library.service
+sudo systemctl stop library.service
+```
+
+
