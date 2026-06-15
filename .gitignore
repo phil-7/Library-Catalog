@@ -6,7 +6,10 @@ venv/
 .env
 
 # SQLite DB (runtime)
-data/library.db
+library.db
+
+# ZIM files (large, managed locally)
+data/
 
 # Python cache
 __pycache__/
