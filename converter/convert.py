@@ -140,17 +140,15 @@ def page_to_html(page, doc, quality, page_num, total_pages, title, use_ocr=False
 
     page_image_html = ""
     if dpi > 0:
-        pix = page.get_pixmap(dpi=dpi)
         from io import BytesIO
+        import base64
+        pix = page.get_pixmap(dpi=dpi)
         img = Image.open(BytesIO(pix.tobytes("png")))
-
         output = BytesIO()
         if quality == "standard":
             img.save(output, format="JPEG", quality=65)
         else:
             img.save(output, format="JPEG", quality=95)
-
-        import base64
         b64 = base64.b64encode(output.getvalue()).decode("utf-8")
         page_image_html = f'<img src="data:image/jpeg;base64,{b64}" style="max-width:100%;height:auto;display:block;margin:0 auto;">'
 
@@ -158,14 +156,13 @@ def page_to_html(page, doc, quality, page_num, total_pages, title, use_ocr=False
     # EXTRACT TEXT (hidden search layer)
     # -------------------------------------------------------
     if quality == "text":
-        # Text only mode — show text, no image
         text_content = page.get_text()
         hidden_text_html = f"<div style='font-family:sans-serif;line-height:1.6'><pre style='white-space:pre-wrap'>{text_content}</pre></div>"
     else:
-        # Hidden text layer for search
         text_content = page.get_text()
         if not text_content.strip() and use_ocr:
             try:
+                from io import BytesIO
                 import pytesseract
                 pix_ocr = page.get_pixmap(dpi=300)
                 img_ocr = Image.open(BytesIO(pix_ocr.tobytes("png")))
@@ -179,17 +176,41 @@ def page_to_html(page, doc, quality, page_num, total_pages, title, use_ocr=False
     # -------------------------------------------------------
     # NAVIGATION BAR
     # -------------------------------------------------------
-    prev_link = f'<a href="page_{page_num - 1}.html">← Previous</a>' if page_num > 1 else ""
-    next_link = f'<a href="page_{page_num + 1}.html">Next →</a>' if page_num < total_pages else ""
+    prev_btn = f"<a href='page_{page_num - 1}.html' style='text-decoration:none;padding:4px 10px;border:1px solid #ccc;border-radius:4px;'>← Prev</a>" if page_num > 1 else "<span style='color:#ccc;padding:4px 10px;border:1px solid #eee;border-radius:4px;'>← Prev</span>"
+    next_btn = f"<a href='page_{page_num + 1}.html' style='text-decoration:none;padding:4px 10px;border:1px solid #ccc;border-radius:4px;'>Next →</a>" if page_num < total_pages else "<span style='color:#ccc;padding:4px 10px;border:1px solid #eee;border-radius:4px;'>Next →</span>"
 
     nav = f'''
     <div style="position:fixed;bottom:0;left:0;right:0;background:#fff;
     border-top:1px solid #ccc;padding:8px 16px;display:flex;
-    justify-content:space-between;font-family:sans-serif;font-size:14px;">
-        {prev_link}
-        <span>Page {page_num} of {total_pages} — {title}</span>
-        {next_link}
+    justify-content:space-between;align-items:center;font-family:sans-serif;font-size:14px;gap:10px;">
+
+        {prev_btn}
+
+        <form style="display:flex;align-items:center;gap:6px;margin:0;"
+              onsubmit="goToPage(event, {total_pages})">
+            <span>{title}</span>
+            <span>|</span>
+            <span>Page</span>
+            <input type="number" id="pageInput" min="1" max="{total_pages}"
+                   value="{page_num}"
+                   style="width:55px;padding:3px 6px;border:1px solid #ccc;border-radius:4px;text-align:center;">
+            <span>of {total_pages}</span>
+            <button type="submit" style="padding:3px 8px;border:1px solid #ccc;border-radius:4px;cursor:pointer;">Go</button>
+        </form>
+
+        {next_btn}
+
     </div>
+
+    <script>
+    function goToPage(e, totalPages) {{
+        e.preventDefault();
+        const num = parseInt(document.getElementById('pageInput').value);
+        if (num >= 1 && num <= totalPages) {{
+            window.location.href = 'page_' + num + '.html';
+        }}
+    }}
+    </script>
     '''
 
     # -------------------------------------------------------
@@ -204,7 +225,7 @@ def page_to_html(page, doc, quality, page_num, total_pages, title, use_ocr=False
     <style>
         body {{
             margin: 0;
-            padding: 0 0 60px 0;
+            padding: 0 0 70px 0;
             background: #f0f0f0;
         }}
         img {{
@@ -224,6 +245,7 @@ def page_to_html(page, doc, quality, page_num, total_pages, title, use_ocr=False
 </html>'''
 
     return html
+
 
 # -------------------------------------------------------
 # ZIM WRITER
