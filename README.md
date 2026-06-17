@@ -7,8 +7,8 @@ A self-hosted offline digital library built with Flask and Python. Designed to r
 ## Motivation
 
 Millions of people around the world lack reliable internet access, yet have a genuine desire to learn. This project aims to bridge that gap by providing a portable, offline-first library that any community can use.
-This project is personal. I was born and raised in Haiti, a country where internet access remains limited and unreliable for much of the population. Haiti has an incredibly rich culture and a deep hunger for knowledge, yet access to educational resources remains out of reach for many. This library is built with that community in mind. It is designed to work in places like rural Haiti where connectivity is scarce but the desire to learn is not.
-The interface supports the three languages most relevant to the communities this project serves: English, French, and Haitian Creole (Kreyòl). Content is sourced from open educational resources like Wikipedia, PhET Interactive Simulations, and Ekopedia, all available offline through the ZIM file format.
+
+The interface supports the three languages: English, French, and Haitian Creole. More languages to come. Content is sourced from open educational resources like Wikipedia, PhET Interactive Simulations, and Ekopedia, all available offline through the ZIM file format.
 
 ---
 
